@@ -1,4 +1,4 @@
-package main
+package grpc_go_auth
 
 import (
 	"encoding/json"
@@ -92,8 +92,6 @@ func generateToken(filepath string, serviceName string, keypath string) (string,
 
 	return tokenString, nil
 }
-
-// Code for HMAC-SHA256
 
 //package main
 //
