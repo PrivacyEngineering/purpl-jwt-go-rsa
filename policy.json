@@ -20,7 +20,6 @@
         "allowed":
           {
             "name": "string",
-            "street": "string",
             "sex": "string"
           },
         "generalized":
@@ -32,7 +31,9 @@
             "age": "int"
           },
         "reduced":
-        {}
+        {
+          "street": "string"
+        }
       },
       "service3": {
         "allowed":
