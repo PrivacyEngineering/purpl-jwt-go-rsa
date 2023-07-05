@@ -11,7 +11,8 @@ import (
 )
 
 func generateToken(filepath string, serviceName string, keypath string) (string, error) {
-	// Load JSON from file
+
+	// Load policy from file
 	policyData, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		log.Fatalf("Error reading policy.json: %v", err)
@@ -30,7 +31,7 @@ func generateToken(filepath string, serviceName string, keypath string) (string,
 		return "", fmt.Errorf("Invalid policy format: services not found")
 	}
 
-	// Find the service policy based on the service name
+	// Get the service policy based on the service name
 	servicePolicy := make(map[string]interface{})
 	for _, service := range servicesArr {
 		serviceObj := service.(map[string]interface{})
@@ -41,7 +42,7 @@ func generateToken(filepath string, serviceName string, keypath string) (string,
 	}
 
 	if len(servicePolicy) == 0 {
-		return "", fmt.Errorf("Service %s not found in policy.json", serviceName)
+		return "", fmt.Errorf("Service %s not found in policy file", serviceName)
 	}
 
 	// Create the reduced policy based on the service policy
@@ -77,6 +78,7 @@ func generateToken(filepath string, serviceName string, keypath string) (string,
 	}{
 		reducedPolicyJSON,
 		jwt.StandardClaims{
+			// Valid for 24 hrs
 			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 			Issuer:    "test",
 		},
@@ -92,92 +94,3 @@ func generateToken(filepath string, serviceName string, keypath string) (string,
 
 	return tokenString, nil
 }
-
-//package main
-//
-//import (
-//	"encoding/json"
-//	"fmt"
-//	"io/ioutil"
-//	"log"
-//	"time"
-//
-//	jwt "github.com/dgrijalva/jwt-go"
-//)
-//
-//func generateToken(filepath string, serviceName string) (string, error) {
-//	// Load JSON from file
-//	policyData, err := ioutil.ReadFile(filepath)
-//	if err != nil {
-//		log.Fatalf("Error reading policy.json: %v", err)
-//	}
-//
-//	// Parse the policy JSON into a map
-//	var policyMap map[string]interface{}
-//	err = json.Unmarshal(policyData, &policyMap)
-//	if err != nil {
-//		log.Fatalf("Error parsing policy.json: %v", err)
-//	}
-//
-//	// Retrieve the services array from the policy
-//	servicesArr, exists := policyMap["services"].([]interface{})
-//	if !exists {
-//		return "", fmt.Errorf("Invalid policy format: services not found")
-//	}
-//
-//	// Find the service policy based on the service name
-//	servicePolicy := make(map[string]interface{})
-//	for _, service := range servicesArr {
-//		serviceObj := service.(map[string]interface{})
-//		if _, exists := serviceObj[serviceName]; exists {
-//			servicePolicy = serviceObj[serviceName].(map[string]interface{})
-//			break
-//		}
-//	}
-//
-//	if len(servicePolicy) == 0 {
-//		return "", fmt.Errorf("Service %s not found in policy.json", serviceName)
-//	}
-//
-//	// Create the reduced policy based on the service policy
-//	reducedPolicy := map[string]interface{}{
-//		"allowed":     servicePolicy["allowed"],
-//		"generalized": servicePolicy["generalized"],
-//		"noised":      servicePolicy["noised"],
-//	}
-//
-//	// Convert the reduced policy to JSON
-//	reducedPolicyJSON, err := json.Marshal(reducedPolicy)
-//	if err != nil {
-//		log.Fatalf("Error marshaling reduced policy: %v", err)
-//	}
-//
-//	// Create the Claims
-//	claims := struct {
-//		Policy json.RawMessage `json:"policy"`
-//		jwt.StandardClaims
-//	}{
-//		reducedPolicyJSON,
-//		jwt.StandardClaims{
-//			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-//			Issuer:    "test",
-//		},
-//	}
-//
-//	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-//	tokenString, err := token.SignedString([]byte("your-secret"))
-//	if err != nil {
-//		log.Fatalf("Error signing token: %v", err)
-//		return "", err
-//	}
-//
-//	return tokenString, nil
-//}
-//
-//func main() {
-//	policy, err := generateToken("policy.json", "service1")
-//	if err != nil {
-//		log.Println(err)
-//	}
-//	fmt.Println(policy)
-//}
