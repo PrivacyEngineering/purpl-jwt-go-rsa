@@ -1,4 +1,4 @@
-module github.com/Siar-Akbayin/grpc-go-auth
+module github.com/Siar-Akbayin/jwt-go-auth
 
 go 1.20
 
