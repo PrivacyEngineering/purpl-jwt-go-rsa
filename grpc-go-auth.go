@@ -10,7 +10,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
-func generateToken(filepath string, serviceName string, keypath string) (string, error) {
+func GenerateToken(filepath string, serviceName string, keypath string) (string, error) {
 
 	// Load policy from file
 	policyData, err := ioutil.ReadFile(filepath)
