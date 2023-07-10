@@ -13,33 +13,67 @@ The key should be a RSA private key and the JSON structure of the policy should 
       "service1": {
         "allowed":
         {
-          "field1": "type",
-          "field2": "type",
-          "field3": "type"
+          "field1": [
+            "string"
+          ],
+          "field2": [
+            "string"
+          ],
+          "field3": [
+            "string"
+          ]
         },
         "generalized":
         {
-          "field1": "type",
-          "field2": "type",
-          "field3": "type"
+          "field1": [
+            "string",
+            "parameter if necessary"
+          ],
+          "field2": [
+            "string",
+            "parameter if necessary"
+          ],
+          "field3": [
+            "string",
+            "parameter if necessary"
+          ]
         },
         "noised": 
         {
-          "field1": "type",
-          "field2": "type",
-          "field3": "type"
+          "field1": [
+            "string",
+            "parameter if necessary"
+          ],
+          "field2": [
+            "string",
+            "parameter if necessary"
+
+          ],
+          "field3": [
+            "string",
+            "parameter if necessary"
+          ]
         },
         "reduced":
         {
-          "field1": "type",
-          "field2": "type",
-          "field3": "type"
+          "field1": [
+            "string",
+            "parameter if necessary"
+          ],
+          "field2": [
+            "string",
+            "parameter if necessary"
+          ],
+          "field3": [
+            "string",
+            "parameter if necessary"
+          ]
         }
       },
       "service2": {
-        ...
+        "..."
       },
-      ...
+      "..."
   ]
 }
 ```
@@ -49,52 +83,67 @@ Example:
 {
   "services": [
     {
-      "registration": {
-        "allowed":
-        {},
-        "generalized":
-        {
-          "street": "string",
-          "name": "string",
-          "age": "int",
-          "sex": "string",
-          "phoneNumber": "string"
+      "service1": {
+        "allowed": {
         },
-        "noised": {},
-        "reduced":
-        {}
-      },
-      "advertisement": {
-        "allowed":
-        {
-          "name": "string",
-          "street": "string",
-          "sex": "string"
+        "generalized": {
+          "credit_card_cvv": [
+            "int",
+            "3"
+          ],
+          "zip_code": [
+            "int",
+            "8"
+          ],
+          "city": [
+            "string",
+            "2"
+          ],
+          "credit_card_expiration_year": [
+            "int",
+            "10"
+          ],
+          "credit_card_number": [
+            "string",
+            "5"
+          ]
         },
-        "generalized":
-        {
-          "phoneNumber": "string"
+        "noised": {
+          "age": [
+            "int",
+            "Laplace"
+          ],
+          "street_number": [
+            "int",
+            "Laplace"
+          ],
+          "street_name": [
+            "string",
+            "Laplace"
+          ],
+          "credit_card_expiration_month": [
+            "int",
+            "Laplace"
+          ]
         },
-        "noised":
-        {
-          "age": "int"
-        },
-        "reduced":
-        {}
-      },
-      "tracking": {
-        "allowed":
-        {
-          "street": "string",
-          "name": "string",
-          "age": "int",
-          "sex": "string",
-          "phoneNumber": "string"
-        },
-        "generalized": {},
-        "noised": {},
-        "reduced":
-        {}
+        "reduced": {
+          "email": [
+            "string",
+            "4"
+          ],
+          "country": [
+            "string",
+            "3"
+          ],
+          "name": [
+            "string",
+            "4"
+          ],
+          "phone": [
+            "string",
+            "3"
+          ]
+        }
       }
     }
   ]
