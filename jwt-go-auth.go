@@ -1,4 +1,4 @@
-package grpc_go_auth
+package main
 
 import (
 	"encoding/json"
@@ -7,10 +7,10 @@ import (
 	"log"
 	"time"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateToken(filepath string, serviceName string, keypath string) (string, error) {
+func GenerateToken(filepath string, serviceName string, purpose string, keyPath string) (string, error) {
 
 	// Load policy from file
 	policyData, err := ioutil.ReadFile(filepath)
@@ -25,32 +25,30 @@ func GenerateToken(filepath string, serviceName string, keypath string) (string,
 		log.Fatalf("Error parsing policy.json: %v", err)
 	}
 
-	// Retrieve the services array from the policy
-	servicesArr, exists := policyMap["services"].([]interface{})
+	// Retrieve the services object from the policy
+	servicesObj, exists := policyMap["services"].(map[string]interface{})
 	if !exists {
 		return "", fmt.Errorf("Invalid policy format: services not found")
 	}
 
 	// Get the service policy based on the service name
-	servicePolicy := make(map[string]interface{})
-	for _, service := range servicesArr {
-		serviceObj := service.(map[string]interface{})
-		if _, exists := serviceObj[serviceName]; exists {
-			servicePolicy = serviceObj[serviceName].(map[string]interface{})
-			break
-		}
-	}
-
-	if len(servicePolicy) == 0 {
+	servicePolicy, exists := servicesObj[serviceName].(map[string]interface{})
+	if !exists {
 		return "", fmt.Errorf("Service %s not found in policy file", serviceName)
 	}
 
-	// Create the reduced policy based on the service policy
+	// Get the policy for the specified purpose
+	purposePolicy, exists := servicePolicy[purpose].(map[string]interface{})
+	if !exists {
+		return "", fmt.Errorf("Purpose %s not found in service policy", purpose)
+	}
+
+	// Create the reduced policy based on the purpose policy
 	reducedPolicy := map[string]interface{}{
-		"allowed":     servicePolicy["allowed"],
-		"generalized": servicePolicy["generalized"],
-		"noised":      servicePolicy["noised"],
-		"reduced":     servicePolicy["reduced"],
+		"allowed":     purposePolicy["allowed"],
+		"generalized": purposePolicy["generalized"],
+		"noised":      purposePolicy["noised"],
+		"reduced":     purposePolicy["reduced"],
 	}
 
 	// Convert the reduced policy to JSON
@@ -60,7 +58,7 @@ func GenerateToken(filepath string, serviceName string, keypath string) (string,
 	}
 
 	// Load the RSA private key from file
-	keyData, err := ioutil.ReadFile(keypath)
+	keyData, err := ioutil.ReadFile(keyPath)
 	if err != nil {
 		log.Fatalf("Error reading private key: %v", err)
 	}
@@ -74,13 +72,13 @@ func GenerateToken(filepath string, serviceName string, keypath string) (string,
 	// Create the Claims
 	claims := struct {
 		Policy json.RawMessage `json:"policy"`
-		jwt.StandardClaims
+		jwt.RegisteredClaims
 	}{
 		reducedPolicyJSON,
-		jwt.StandardClaims{
-			// Valid for 24 hrs
-			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-			Issuer:    "test",
+		jwt.RegisteredClaims{
+			// Valid for 2 hrs
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 2)),
+			Issuer:    "tokenGenerator",
 		},
 	}
 
