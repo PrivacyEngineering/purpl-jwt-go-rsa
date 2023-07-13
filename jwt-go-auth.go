@@ -10,10 +10,10 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateToken(filepath string, serviceName string, purpose string, keyPath string) (string, error) {
+func GenerateToken(policyPath string, serviceName string, purpose string, keyPath string) (string, error) {
 
 	// Load policy from file
-	policyData, err := ioutil.ReadFile(filepath)
+	policyData, err := ioutil.ReadFile(policyPath)
 	if err != nil {
 		log.Fatalf("Error reading policy.json: %v", err)
 	}
