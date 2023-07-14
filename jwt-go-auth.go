@@ -10,7 +10,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateToken(policyPath string, serviceName string, purpose string, keyPath string) (string, error) {
+func GenerateToken(policyPath string, serviceName string, purpose string, keyPath string, expirationInHours time.Duration) (string, error) {
 
 	// Load policy from file
 	policyData, err := ioutil.ReadFile(policyPath)
@@ -77,7 +77,7 @@ func GenerateToken(policyPath string, serviceName string, purpose string, keyPat
 		reducedPolicyJSON,
 		jwt.RegisteredClaims{
 			// Valid for 2 hrs
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 2)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * expirationInHours)),
 			Issuer:    "tokenGenerator",
 		},
 	}
