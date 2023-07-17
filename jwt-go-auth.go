@@ -1,4 +1,4 @@
-package main
+package grpc_go_auth
 
 import (
 	"encoding/json"
