@@ -1,6 +1,6 @@
 To use this module run:
 ```shell
-go get -u github.com/Siar-Akbayin/jwt-go-auth@v0.1.2
+go get -u github.com/Siar-Akbayin/jwt-go-auth@v0.1.3
 ``` 
 
 and add this import statement to your Go file:
