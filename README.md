@@ -4,7 +4,9 @@ go get -u github.com/Siar-Akbayin/jwt-go-auth@v0.1.3
 ``` 
 
 and add this import statement to your Go file:
+```go
 import ("github.com/Siar-Akbayin/jwt-go-auth")
+```
 
 # grpc-go-auth
 This module contains a function that generates and returns a JWT based on a policy file. 
