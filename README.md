@@ -99,4 +99,4 @@ The key should be a RSA private key and the JSON structure of the policy should 
 ```
 
 Example:
-You can find an example [here](https://github.com/Siar-Akbayin/jwt-go-auth/blob/main/policy.json).
+You can find an example [here](https://github.com/PEngG7/jwt-go-rsa/blob/main/policy.json).
