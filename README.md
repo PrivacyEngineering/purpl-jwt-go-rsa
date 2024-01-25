@@ -1,3 +1,9 @@
+<p align="center">
+	<img src="purpl.png" width=50" />
+</p>
+
+# purpl JWT generation using RSA
+
 To use this module run:
 ```shell
 go get -u github.com/Siar-Akbayin/jwt-go-auth@v0.1.3
