@@ -12,9 +12,9 @@ The function structure is:
 GenerateToken(policyPath string, serviceName string, purpose string, keyPath string, expirationInHours time.Duration)
 ```
 
-The key should be a RSA private key and the JSON structure of the policy should be:
+The key should be an RSA private key and the JSON structure of the policy should be:
 
-```json
+```
 {
   "services": [
     {
