@@ -2,7 +2,7 @@
 	<img src="purpl.png" width=50" />
 </p>
 
-# grpc-go-auth
+# jwt-go-auth
 This Go module generates JWTs using RSA encryption, tailored to specific services and purposes as defined in a policy file. 
 It dynamically adjusts token claims based on the policy, including permissions and conditions for the token's use, then 
 signs it with a private RSA key. The token's expiration is set according to the specified duration.
